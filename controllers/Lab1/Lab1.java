@@ -5,7 +5,7 @@ import simlejos.hardware.sensor.EV3UltrasonicSensor;
 import simlejos.robotics.RegulatedMotor;
 
 /**
- * Main class of the program. 
+ * Main class of the program.
  */
 public class Lab1 {
   
@@ -17,10 +17,10 @@ public class Lab1 {
   /** Ideal distance between the sensor and the wall (cm). */
   public static final int WALL_DIST = 30;
   /** The maximum tolerated deviation from the ideal WALL_DIST, aka the deadband, in cm. */
-  public static final int WALL_DIST_ERR_THRESH = 3;
-  /** Speed of slower rotating wheel (deg/sec). */
-  public static final int MOTOR_LOW = 25;
-  /** Speed of the faster rotating wheel (deg/sec). */
+  public static final int WALL_DIST_ERR_THRESH = 5;
+  /** Speed of the slower wheel (deg/sec). */
+  public static final int MOTOR_LOW = 30;
+  /** Speed of the faster wheel (deg/sec). */
   public static final int MOTOR_HIGH = 200;
   /** The limit of invalid samples that we read from the US sensor before assuming no obstacle. */
   public static final int INVALID_SAMPLE_LIMIT = 20;
@@ -59,8 +59,7 @@ public class Lab1 {
     
     leftMotor.setSpeed(MOTOR_HIGH);
     rightMotor.setSpeed(MOTOR_HIGH);
-    leftMotor.forward();
-    rightMotor.forward();
+    goForward();
     
     while (true) {
       controller(readUsDistance(), motorSpeeds);
@@ -75,13 +74,38 @@ public class Lab1 {
    * @param motorSpeeds output parameter you need to set
    */
   public static void controller(int distance, int[] motorSpeeds) {
-    int leftSpeed = MOTOR_HIGH;
-    int rightSpeed = MOTOR_HIGH;
-    
-    // TODO Calculate the correct motor speeds and assign them to motorSpeeds like this
+    int leftSpeed;
+    int rightSpeed;
+    //error calculated by subtracting actual distance from demanded distance 
+    int error = WALL_DIST - distance; 
+    //Triggers if not within deadband
+    if (Math.abs(error) > WALL_DIST_ERR_THRESH) {
+      if (error > 0) {
+        //Distance is lower than desired; speed up left wheel to turn away from the wall
+        leftSpeed = MOTOR_HIGH;
+        rightSpeed = MOTOR_LOW;
+        goForward();
+      } else {
+        //Distance is higher than desired; speed up right wheel to turn towards the wall
+        leftSpeed = MOTOR_LOW;
+        rightSpeed = MOTOR_HIGH;
+        goForward();
+      }
+    } else {
+      leftSpeed = MOTOR_HIGH;
+      rightSpeed = MOTOR_HIGH; // if distance is within the deadband, return to normal speed
+      goForward();
+    }
     
     motorSpeeds[LEFT] = leftSpeed;
     motorSpeeds[RIGHT] = rightSpeed;
+  }
+  
+  /** Tells the motors to go forward. */
+  
+  public static void goForward() {
+    leftMotor.backward();
+    rightMotor.backward();
   }
   
   /** Returns the filtered distance between the US sensor and an obstacle in cm. */
@@ -116,6 +140,7 @@ public class Lab1 {
   public static void setMotorSpeeds() {
     leftMotor.setSpeed(motorSpeeds[LEFT]);
     rightMotor.setSpeed(motorSpeeds[RIGHT]);
+    //force update
   }
 
 }
