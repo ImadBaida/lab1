@@ -84,11 +84,7 @@ public class Lab1 {
         //Distance is lower than desired; speed up left wheel to turn away from the wall
         leftSpeed = MOTOR_HIGH;
         rightSpeed = MOTOR_LOW;
-//<<<<<<< HEAD
-        goForward();
-//=======
         goForward(); //Ensures update of speed on physical robot
-//>>>>>>> c7260da8473c38da4d82fcbddb806245edfec455
       } else {
         //Distance is higher than desired; speed up right wheel to turn towards the wall
         leftSpeed = MOTOR_LOW;
@@ -106,7 +102,6 @@ public class Lab1 {
   }
   
   /** Tells the motors to go forward. */
-  
   public static void goForward() {
     leftMotor.backward();
     rightMotor.backward();
@@ -144,7 +139,6 @@ public class Lab1 {
   public static void setMotorSpeeds() {
     leftMotor.setSpeed(motorSpeeds[LEFT]);
     rightMotor.setSpeed(motorSpeeds[RIGHT]);
-    //force update
   }
 
 }
