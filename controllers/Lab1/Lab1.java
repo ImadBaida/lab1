@@ -17,7 +17,7 @@ public class Lab1 {
   /** Ideal distance between the sensor and the wall (cm). */
   public static final int WALL_DIST = 35;
   /** The maximum tolerated deviation from the ideal WALL_DIST, aka the deadband, in cm. */
-  public static final int WALL_DIST_ERR_THRESH = 10;
+  public static final int WALL_DIST_ERR_THRESH = 7;
   /** Speed of the slower wheel (deg/sec). */
   public static final int MOTOR_LOW = 30;
   /** Speed of the faster wheel (deg/sec). */
@@ -96,11 +96,13 @@ public class Lab1 {
       rightSpeed = MOTOR_HIGH; // if distance is within the deadband, return to normal speed
       goForward();
     }
+
     motorSpeeds[LEFT] = leftSpeed;
     motorSpeeds[RIGHT] = rightSpeed;
   }
 
   /** Tells the motors to go forward. */
+
   public static void goForward() {
     leftMotor.backward();
     rightMotor.backward();
