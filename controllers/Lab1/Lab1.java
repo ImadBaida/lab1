@@ -5,7 +5,7 @@ import simlejos.hardware.sensor.EV3UltrasonicSensor;
 import simlejos.robotics.RegulatedMotor;
 
 /**
- * Main class of the program. 
+ * Main class of the program. pogu
  */
 public class Lab1 {
   
